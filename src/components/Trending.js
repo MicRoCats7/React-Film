@@ -1,7 +1,21 @@
+import { useEffect, useState } from 'react';
 import {Card, Container, Row, Col, Image } from 'react-bootstrap';
-import onepieceImage from '../assets/images/trending/onepiece.jpg'
+import axios from "axios"
 
 const Trending = () => {
+    const [movies, setMovies] = useState([])
+    useEffect(() =>{
+        axios.get(`${process.env.REACT_APP_BASE_URL}/discover/movie`, {
+            params: {
+                api_key: process.env.REACT_APP_TMDB_KEY
+            }
+        }).then((response) => {
+            setMovies(response.data.results)
+        })
+    }, [])
+
+
+
     return(
         <div>
         <Container>
@@ -10,90 +24,24 @@ const Trending = () => {
             <h1 className='text-white'>TRENDING MOVIES</h1>
             <br/>
             <Row>
-                <Col md={4} className='movieWrapper' id='trending'>
+                {movies.map((result, index) => {
+                    return(
+                        <Col md={4} className='movieWrapper' id='trending' key={index}>
                     <Card className="movieImage">
-                        <Image src={onepieceImage} alt="OnePiece Red" className='images'/>
+                        <Image src={`${process.env.REACT_APP_IMG_URL}/${result.poster_path}`} alt="Movies" className='images'/>
                         <div className='bg-dark'>
                          <div className='p-2 m-1 text-white'>
-                            <Card.Title className='text-center'>One Piece Red</Card.Title>
+                            <Card.Title className='text-center'>{result.title}</Card.Title>
                             <Card.Text className='text-left'>
-                            This is a wider card with supporting text below as a natural additional content.
+                                {result.overview}
                             </Card.Text>
-                            <Card.Text className='text-left'>Last updated 3 mins ago</Card.Text>
+                            <Card.Text className='text-left'>{result.release_date}</Card.Text>
                          </div>                           
                         </div>
                     </Card>
-                </Col>
-                <Col md={4} className='movieWrapper'>
-                    <Card className="movieImage">
-                        <Image src={onepieceImage} alt="OnePiece Red" className='images'/>
-                        <div className='bg-dark'>
-                         <div className='p-2 m-1 text-white'>
-                            <Card.Title className='text-center'>One Piece Red</Card.Title>
-                            <Card.Text className='text-left'>
-                            This is a wider card with supporting text below as a natural additional content.
-                            </Card.Text>
-                            <Card.Text className='text-left'>Last updated 3 mins ago</Card.Text>
-                         </div>                           
-                        </div>
-                    </Card>
-                </Col>
-                <Col md={4} className='movieWrapper'>
-                    <Card className="movieImage">
-                        <Image src={onepieceImage} alt="OnePiece Red" className='images'/>
-                        <div className='bg-dark'>
-                         <div className='p-2 m-1 text-white'>
-                            <Card.Title className='text-center'>One Piece Red</Card.Title>
-                            <Card.Text className='text-left'>
-                            This is a wider card with supporting text below as a natural additional content.
-                            </Card.Text>
-                            <Card.Text className='text-left'>Last updated 3 mins ago</Card.Text>
-                         </div>                           
-                        </div>
-                    </Card>
-                </Col>
-                <Col md={4} className='movieWrapper'>
-                    <Card className="movieImage">
-                        <Image src={onepieceImage} alt="OnePiece Red" className='images'/>
-                        <div className='bg-dark'>
-                         <div className='p-2 m-1 text-white'>
-                            <Card.Title className='text-center'>One Piece Red</Card.Title>
-                            <Card.Text className='text-left'>
-                            This is a wider card with supporting text below as a natural additional content.
-                            </Card.Text>
-                            <Card.Text className='text-left'>Last updated 3 mins ago</Card.Text>
-                         </div>                           
-                        </div>
-                    </Card>
-                </Col>
-                <Col md={4} className='movieWrapper'>
-                    <Card className="movieImage">
-                        <Image src={onepieceImage} alt="OnePiece Red" className='images'/>
-                        <div className='bg-dark'>
-                         <div className='p-2 m-1 text-white'>
-                            <Card.Title className='text-center'>One Piece Red</Card.Title>
-                            <Card.Text className='text-left'>
-                            This is a wider card with supporting text below as a natural additional content.
-                            </Card.Text>
-                            <Card.Text className='text-left'>Last updated 3 mins ago</Card.Text>
-                         </div>                           
-                        </div>
-                    </Card>
-                </Col>
-                <Col md={4} className='movieWrapper'>
-                    <Card className="movieImage">
-                        <Image src={onepieceImage} alt="OnePiece Red" className='images'/>
-                        <div className='bg-dark'>
-                         <div className='p-2 m-1 text-white'>
-                            <Card.Title className='text-center'>One Piece Red</Card.Title>
-                            <Card.Text className='text-left'>
-                            This is a wider card with supporting text below as a natural additional content.
-                            </Card.Text>
-                            <Card.Text className='text-left'>Last updated 3 mins ago</Card.Text>
-                         </div>                           
-                        </div>
-                    </Card>
-                </Col>
+                </Col>               
+                    )
+                })}
             </Row>
         </Container>
         </div>
